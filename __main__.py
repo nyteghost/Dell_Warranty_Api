@@ -317,7 +317,7 @@ class DellApi:
 
 params = urllib.parse.quote_plus("DRIVER={SQL Server Native Client 11.0};"
                                 'Server='+(config['database']['Server'])+';'
-                                'Database=GCAAssetMGMT_2_0;'
+                                'Database=SomeSchoolAssetMGMT_2_0;'
                                 'UID='+(config['database']['UID'])+';'
                                 'PWD='+(config['database']['PWD'])+';')
 
@@ -339,7 +339,7 @@ SELECT
     STUFF((SELECT','+SN
             FROM(
                 SELECT TOP 99 LOWER(SerialNumber) AS SN 
-                FROM GCAAssetMGMT_2_0.Asset.Info 
+                FROM SomeSchoolAssetMGMT_2_0.Asset.Info 
                 WHERE Manufacturer = 'Dell'
                     AND LEN(SerialNumber) BETWEEN 6 and 8
                 ORDER BY SerialNumber) s
@@ -351,7 +351,7 @@ logger.remove(0)
 
 def main():
     for i in range(100):
-        sql_warranty_pull = f"EXEC GCAAssetMGMT_2_0.Asset.uspNxt100_4_DellWarrantyCheck;"
+        sql_warranty_pull = f"EXEC SomeSchoolAssetMGMT_2_0.Asset.uspNxt100_4_DellWarrantyCheck;"
         warranty_sql_pull = pd.read_sql_query(sql_warranty_pull,conn)
         print(warranty_sql_pull)
         if not warranty_sql_pull.empty:
@@ -372,7 +372,7 @@ def main():
             exit()
             
 def secondary():
-    sql_warranty_pull = f"EXEC GCAAssetMGMT_2_0.Asset.uspNxt100_4_DellWarrantyCheck;"
+    sql_warranty_pull = f"EXEC SomeSchoolAssetMGMT_2_0.Asset.uspNxt100_4_DellWarrantyCheck;"
     warranty_sql_pull = pd.read_sql_query(sql_warranty_pull,conn)
     json_info = warranty_sql_pull['result'].loc[0]
     # print(json_info)
@@ -400,5 +400,5 @@ main()
 #     service_tag=input('Enter service tag:')
 #     dt = d.details_table(service_tag)
 # elif selection == '2':
-#     service_tags = d.servicetags_from_file(r'C:\Users\Mbrown\Desktop\GCA-Coding\Projects\Python\sca_dell_warranty\serial.txt')
+#     service_tags = d.servicetags_from_file(r'')
 #     wt = d.warranty_Dataframe(serial_numbers)
